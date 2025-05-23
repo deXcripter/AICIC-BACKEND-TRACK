@@ -1,54 +1,29 @@
-const http = require("http");
-const url = require("url");
-const tasks = require("./tasks");
+const express = require("express");
+const morgan = require("morgan");
+const {
+  getAllCards,
+  createCard,
+  getSingleCardById,
+  routeNotFount,
+} = require("./controller/card.controller");
 
-// In-memory "database"
-// let tasks = [
-//   { id: 1, title: "Learn Node.js", completed: false },
-//   { id: 2, title: "Build an API", completed: false },
-// ];
+const app = express();
 
-// 1 -> Get individual tasks DONE
-// 2. -> Create new tasks DONE
-// 3. -> Getting all tasks DONE
-const server = http.createServer((req, res) => {
-  const { pathname, query } = url.parse(req.url, true);
-  console.log(req.method);
-
-  // GET: /
-  if (pathname == "/" && !query.id && req.method == "GET") {
-    res.end(JSON.stringify(tasks));
-  }
-  // GET: /?id=
-  else if (pathname == "/" && query && req.method == "GET") {
-    const selectedTask = tasks.find((tk) => tk.id == query.id);
-
-    if (!selectedTask) {
-      res.statusCode = 404;
-      res.end("No task found with this id");
-    }
-
-    res.end(JSON.stringify(selectedTask));
-  } else if (pathname == "/" && req.method === "POST") {
-    let body = "";
-
-    req.on("data", (data) => {
-      body += data.toString();
-    });
-
-    req.on("end", () => {
-      const newTask = JSON.parse(body);
-      tasks.push(newTask);
-      res.end(JSON.stringify(tasks));
-    });
-
-    res.end(`Task created successfully`);
-  } else {
-    res.statusCode = 404;
-    res.end("This route doesn not exist on this server");
-  }
+// middleware
+app.use(express.json());
+app.use(morgan("dev"));
+app.use((req, res, next) => {
+  console.log("👋 Hello from the middleware");
+  next();
 });
 
-server.listen(8080, () => {
-  console.log("Server  is currently listening on port 8080");
+// ROUTES
+app.route("/api/v1/cards").get(getAllCards).post(createCard);
+app.get("/api/v1/cards/:id", getSingleCardById);
+app.use(routeNotFount);
+
+// server
+const port = 8080;
+app.listen(port, () => {
+  console.log(`Server is currently listening ${port}`);
 });
