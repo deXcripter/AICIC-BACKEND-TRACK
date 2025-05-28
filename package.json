@@ -1,24 +1,28 @@
 {
-  "name": "my-first-backend",
+  "name": "students-market-place",
   "version": "1.0.0",
-  "description": "",
-  "homepage": "https://github.com/deXcripter/AICIC-BACKEND-TRACK#readme",
-  "bugs": {
-    "url": "https://github.com/deXcripter/AICIC-BACKEND-TRACK/issues"
-  },
+  "description": "an commerce api for buying and selling ",
+  "keywords": [
+    "api",
+    "express.js",
+    "mongodb"
+  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deXcripter/AICIC-BACKEND-TRACK.git"
+    "url": "github.com/deXcripter/AICIC-BACKEND-TRACK.git"
   },
   "license": "ISC",
-  "author": "Johnpaul",
+  "author": "Johnpaul Nnaji",
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon index.js"
   },
   "dependencies": {
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "mongodb": "^6.16.0",
+    "mongoose": "^8.14.1",
     "morgan": "^1.10.0"
   }
 }
