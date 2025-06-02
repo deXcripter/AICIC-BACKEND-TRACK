@@ -3,7 +3,15 @@ const Router = express.Router();
 
 const listingController = require("../controller/listing.controller");
 
-Router.post("/", listingController.createListing);
+// /api/v1/listings
+
+Router.route("/")
+  .post(listingController.createListing)
+  .get(listingController.getAllListings);
+
+Router.route("/:id")
+  .get(listingController.getListingByID)
+  .delete(listingController.deleteListingById);
 
 module.exports = {
   listingRoute: Router,
