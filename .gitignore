@@ -2,3 +2,4 @@ node_modules
 notes.md
 roadmap.md
 config.env
+*.env
