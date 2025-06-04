@@ -3,18 +3,9 @@
  * ----------------------------------------------------------
  * This middleware catches and processes all errors that are passed to next() throughout the application
  * It handles errors differently based on the environment (production vs development)
- *
- * @param {Error} err - The error object caught by Express
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
- * @returns {Object} JSON response with appropriate error information based on environment
  */
 
 exports.gloablErrorHandler = (err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
-  const message = err.message || "Something went wrong";
-
   if (process.env.NODE_ENV == "production") {
     return handleProductionError(err, res);
   } else {

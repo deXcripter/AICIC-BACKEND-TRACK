@@ -37,7 +37,6 @@ exports.deleteListingById = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
 
   const list = await Listing.findOne({ _id: id });
-  console.log(list);
   if (!list) {
     next(new AppError("No item found", 404));
   } else {
@@ -47,7 +46,7 @@ exports.deleteListingById = asyncHandler(async (req, res, next) => {
   }
 });
 
-exports.updateListById = asyncHandler(async (req, res, nexts) => {
+exports.updateListById = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
 
   const item = await Listing.findByIdAndUpdate(id, req.body, {
@@ -55,9 +54,7 @@ exports.updateListById = asyncHandler(async (req, res, nexts) => {
   });
 
   if (!item) {
-    return res
-      .status(404)
-      .json({ status: "fail", message: "No Item found" });
+    return next(new AppError("No Item found", 404));
   }
 
   res
