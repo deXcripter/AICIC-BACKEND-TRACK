@@ -1,56 +1,66 @@
 const Listing = require("../models/listing.model");
+const AppError = require("../utils/appError");
+const asyncHandler = require("../utils/asyncHanlder");
 
-exports.createListing = async (req, res) => {
-  try {
-    console.log(req.body);
-    const newListing = await Listing.create(req.body);
+exports.createListing = asyncHandler(async (req, res) => {
+  const newListing = await Listing.create(req.body);
 
-    res.json({
-      data: newListing,
-      message: "You have successfully created a product for listing",
-    });
-  } catch (err) {
-    console.log(err.message);
-    res.status(400).json({ message: "Invalid Data" });
-  }
-};
+  res.json({
+    data: newListing,
+    message: "You have successfully created a product for listing",
+  });
+});
 
-exports.getAllListings = async (req, res) => {
-  try {
-    const listings = await Listing.find();
-    res.json({
-      status: "success",
-      length: listings.length,
-      data: {
-        listings,
-      },
-    });
-  } catch (err) {
-    res.status(404).json({ status: "error", message: "No route found." });
-  }
-};
+exports.getAllListings = asyncHandler(async (req, res, next) => {
+  const listings = await Listing.find();
+  res.json({
+    status: "success",
+    length: listings.length,
+    data: {
+      listings,
+    },
+  });
+});
 
-exports.getListingByID = async (req, res) => {
+exports.getListingByID = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
 
   const listing = await Listing.findOne({ _id: id });
   if (!listing)
-    res.status(404).json({ message: "Listing does not exist", status: "fail" });
+    return next(new AppError("Listing does not exist", 404));
   else {
     res.json({ message: "Listing found", data: listing });
   }
-};
+});
 
-exports.deleteListingById = async (req, res) => {
+exports.deleteListingById = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
 
   const list = await Listing.findOne({ _id: id });
   console.log(list);
-  if (!list)
-    res.status(404).json({ message: "Item does not exist", status: "fail" });
-  else {
+  if (!list) {
+    next(new AppError("No item found", 404));
+  } else {
     await list.deleteOne();
     // list.save();
     res.status(200).json({ message: "Item deleted successfully" });
   }
-};
+});
+
+exports.updateListById = asyncHandler(async (req, res, nexts) => {
+  const id = req.params.id;
+
+  const item = await Listing.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
+
+  if (!item) {
+    return res
+      .status(404)
+      .json({ status: "fail", message: "No Item found" });
+  }
+
+  res
+    .status(200)
+    .json({ data: item, message: "Item updated successfully" });
+});

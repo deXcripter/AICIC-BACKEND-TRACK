@@ -1,16 +1,32 @@
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
+const errorHandler = require("./controller/error.controller");
 
 const { listingRoute } = require("./routes/listing.route");
+const AppError = require("./utils/appError");
 
+// middlewares
 app.use(morgan("dev"));
 app.use(express.json());
+
+// routes
 app.use("/api/v1/listings", listingRoute);
-app.use((req, res) =>
-  res.status(404).json({
-    message: `This route ${req.method}: ${req.url} does not exist on this server`,
-  })
-);
+app.use((req, res, next) => {
+  // const message = `This route ${req.method}: ${req.url} does not exist on this server`;
+  // const err = new Error(message);
+  // err.statusCode = 404;
+  // next(err);
+
+  next(
+    new AppError(
+      `This route ${req.method}: ${req.url} does not exist on this server`,
+      404
+    )
+  );
+});
+
+// global errror handler
+app.use(errorHandler.gloablErrorHandler);
 
 module.exports = app;
