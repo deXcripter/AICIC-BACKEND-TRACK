@@ -17,8 +17,6 @@ function handleValidationErrorDB(err) {
     .map((el) => el.message)
     .join(". ");
 
-  console.log(message);
-
   return new AppError(message, 400);
 }
 

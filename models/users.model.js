@@ -17,20 +17,33 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please provide a password"],
     minlength: 8,
     maxlength: 20,
+    select: false,
   },
   avatar: {
     type: String,
   },
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user",
+  },
 });
 
 userSchema.pre("save", async function (next) {
-  if (this.isNew || this.isModified) {
+  if (this.isNew || this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 12);
   }
 
   next();
 });
 
-const User = mongoose.model("User", userSchema); // Adannas
+userSchema.methods.comparePassword = async function (
+  candidatePassword,
+  hashedDBPassword
+) {
+  return await bcrypt.compare(candidatePassword, hashedDBPassword);
+};
+
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;

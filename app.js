@@ -6,12 +6,14 @@ const errorHandler = require("./controller/error.controller");
 const { listingRoute } = require("./routes/listing.route");
 const { userRoute } = require("./routes/users.routes");
 const AppError = require("./utils/appError");
+const { authRoute } = require("./routes/auth.route");
 
 // middlewares
 app.use(morgan("dev"));
 app.use(express.json());
 
 // routes
+app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/listings", listingRoute);
 app.use("/api/v1/users", userRoute);
 app.use((req, res, next) => {
