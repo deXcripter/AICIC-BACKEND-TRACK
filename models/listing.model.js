@@ -19,6 +19,11 @@ const ListingSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  userId: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+    required: true,
+  },
 });
 
 const Listing = mongoose.model("Listing", ListingSchema); // model

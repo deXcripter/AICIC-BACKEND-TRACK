@@ -27,11 +27,16 @@ const userSchema = new mongoose.Schema({
     enum: ["user", "admin"],
     default: "user",
   },
+  passwordUpdatedAt: Date,
 });
 
 userSchema.pre("save", async function (next) {
   if (this.isNew || this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 12);
+  }
+
+  if (this.isModified("password")) {
+    this.passwordUpdatedAt = Date.now();
   }
 
   next();
@@ -43,6 +48,8 @@ userSchema.methods.comparePassword = async function (
 ) {
   return await bcrypt.compare(candidatePassword, hashedDBPassword);
 };
+
+// userSchema.methods.updateUserPassword = async function ()
 
 const User = mongoose.model("User", userSchema);
 

@@ -62,10 +62,14 @@ exports.login = asyncHandler(async (req, res, next) => {
   )
     return next(new AppError("Invald credentials", 404));
 
-  const token = jwt.sign(
-    { id: foundUser._id },
-    process.env.JWT_SECRET
-  );
+  const payload = {
+    id: foundUser._id, // very important
+    school: "Unizik",
+    course: "CSC",
+    name: "David",
+    car: "Formatticccccccccccc",
+  };
+  const token = jwt.sign(payload, process.env.JWT_SECRET);
 
   res.json({
     token,

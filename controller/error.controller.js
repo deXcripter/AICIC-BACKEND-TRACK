@@ -29,12 +29,17 @@ function handleDuplicateErrorDB(err) {
   return new AppError(message, 400);
 }
 
+function handleJWTError(err) {
+  return new AppError("Invalid token. Please login!!", 401);
+}
+
 exports.gloablErrorHandler = (err, req, res, next) => {
   if (err.name === "CastError") err = handleCastErrorsDB(err);
   if (err.name === "ValidationError")
     err = handleValidationErrorDB(err);
   if (err.code === 11000) err = handleDuplicateErrorDB(err);
 
+  if (err.name === "JsonWebTokenError") err = handleJWTError(err);
   if (process.env.NODE_ENV == "production") {
     return handleProductionError(err, res);
   } else {

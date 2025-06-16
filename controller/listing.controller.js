@@ -1,12 +1,30 @@
 const Listing = require("../models/listing.model");
 const AppError = require("../utils/appError");
 const asyncHandler = require("../utils/asyncHanlder");
+const joi = require("joi");
 
-exports.createListing = asyncHandler(async (req, res) => {
-  const newListing = await Listing.create(req.body);
+exports.createListing = asyncHandler(async (req, res, next) => {
+  // const newListing = await Listing.create(req.body);
+  const schema = joi.object({
+    price: joi.number().min(0).required(),
+    title: joi.string().required(),
+    description: joi.string().required().min(8),
+    category: joi.string().required(),
+    condition: joi.string(),
+  });
+  // .min(1, "You must specify at least one field");
+
+  const { value, error } = schema.validate(req.body);
+  if (error) {
+    return next(new AppError(error.message, 400));
+  }
+
+  value.userId = req.user._id;
+
+  const listing = await Listing.create(value);
 
   res.json({
-    data: newListing,
+    data: listing,
     message: "You have successfully created a product for listing",
   });
 });
@@ -25,7 +43,9 @@ exports.getAllListings = asyncHandler(async (req, res, next) => {
 exports.getListingByID = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
 
-  const listing = await Listing.findOne({ _id: id });
+  const listing = await Listing.findOne({ _id: id }).populate(
+    "userId"
+  );
   if (!listing)
     return next(new AppError("Listing does not exist", 404));
   else {
@@ -39,11 +59,19 @@ exports.deleteListingById = asyncHandler(async (req, res, next) => {
   const list = await Listing.findOne({ _id: id });
   if (!list) {
     next(new AppError("No item found", 404));
-  } else {
-    await list.deleteOne();
-    // list.save();
-    res.status(200).json({ message: "Item deleted successfully" });
   }
+
+  if (list.userId.toString() !== req.user._id.toString()) {
+    return next(
+      new AppError(
+        "You are not authorized to perfrom this aciton",
+        403
+      )
+    );
+  }
+
+  if (list.userId) await list.deleteOne();
+  res.status(200).json({ message: "Item deleted successfully" });
 });
 
 exports.updateListById = asyncHandler(async (req, res, next) => {

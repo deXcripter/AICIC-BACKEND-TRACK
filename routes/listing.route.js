@@ -2,17 +2,18 @@ const express = require("express");
 const Router = express.Router();
 
 const listingController = require("../controller/listing.controller");
+const { protectRoute } = require("../middleware/protectRoute");
 
 // /api/v1/listings
 
 Router.route("/")
-  .post(listingController.createListing)
-  .get(listingController.getAllListings);
+  .post(protectRoute, listingController.createListing)
+  .get(protectRoute, listingController.getAllListings);
 
 Router.route("/:id")
   .get(listingController.getListingByID)
-  .delete(listingController.deleteListingById)
-  .patch(listingController.updateListById);
+  .delete(protectRoute, listingController.deleteListingById)
+  .patch(protectRoute, listingController.updateListById);
 
 module.exports = {
   listingRoute: Router,
