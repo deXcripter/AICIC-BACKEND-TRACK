@@ -39,6 +39,7 @@ exports.protectRoute = asyncHandler(async (req, res, next) => {
   console.log(user.passwordUpdatedAt, new Date(decoded.iat * 1000));
   // password was updated at 10:45
   // jwt token was issued at 10:50
+  // TODO: compare my timestamps instead of Fates
   if (user.passwordUpdatedAt > new Date(decoded.iat * 1000)) {
     return next(
       new AppError(
