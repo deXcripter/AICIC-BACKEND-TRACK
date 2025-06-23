@@ -28,6 +28,14 @@ const userSchema = new mongoose.Schema({
     default: "user",
   },
   passwordUpdatedAt: Date,
+
+  OTP: {
+    type: Number,
+  },
+
+  otpExpiresAt: {
+    type: Date,
+  },
 });
 
 userSchema.pre("save", async function (next) {

@@ -24,8 +24,6 @@ exports.protectRoute = asyncHandler(async (req, res, next) => {
   // 2) verify if the jwt is valid
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-  console.log(decoded);
-
   // 3) validate if the user the token belongs to still exist
   const user = await User.findById(decoded.id);
   if (!user)
@@ -36,9 +34,20 @@ exports.protectRoute = asyncHandler(async (req, res, next) => {
       )
     );
 
-  // TODO: complete the 4th check
-  // 4) check if the user password has been updated after issuing the token
+  // 9:00 am
+  // 10: 01 am
+  console.log(user.passwordUpdatedAt, new Date(decoded.iat * 1000));
+  // password was updated at 10:45
+  // jwt token was issued at 10:50
+  if (user.passwordUpdatedAt > new Date(decoded.iat * 1000)) {
+    return next(
+      new AppError(
+        "This password was recently changed. Please login again",
+        401
+      )
+    );
+  }
 
-  req.user = user;
+  req.user = user; // loads the user to the request
   next();
 });

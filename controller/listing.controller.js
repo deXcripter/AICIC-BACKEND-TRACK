@@ -30,7 +30,26 @@ exports.createListing = asyncHandler(async (req, res, next) => {
 });
 
 exports.getAllListings = asyncHandler(async (req, res, next) => {
-  const listings = await Listing.find();
+  const { title, minPrice, maxPrice } = req.query;
+  const filter = {};
+
+  if (title) {
+    // Use a regular expression for case-insensitive partial matching on the title
+    filter.title = { $regex: title, $options: "i" };
+  }
+
+  // Handle price range filtering
+  if (minPrice || maxPrice) {
+    filter.price = {};
+    if (minPrice) {
+      filter.price.$gte = Number(minPrice);
+    }
+    if (maxPrice) {
+      filter.price.$lte = Number(maxPrice);
+    }
+  }
+
+  const listings = await Listing.find(filter);
   res.json({
     status: "success",
     length: listings.length,
