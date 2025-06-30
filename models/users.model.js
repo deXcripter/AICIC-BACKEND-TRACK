@@ -27,7 +27,10 @@ const userSchema = new mongoose.Schema({
     enum: ["user", "admin"],
     default: "user",
   },
-  passwordUpdatedAt: Date,
+  passwordUpdatedAt: {
+    type: Date,
+    select: false,
+  },
 
   OTP: {
     type: Number,

@@ -49,7 +49,9 @@ exports.getAllListings = asyncHandler(async (req, res, next) => {
     }
   }
 
-  const listings = await Listing.find(filter);
+  const listings = await Listing.find(filter).select(
+    "-createdAt -userId -description -__v"
+  );
   res.json({
     status: "success",
     length: listings.length,
@@ -103,6 +105,8 @@ exports.updateListById = asyncHandler(async (req, res, next) => {
   if (!item) {
     return next(new AppError("No Item found", 404));
   }
+
+  await item.save();
 
   res
     .status(200)

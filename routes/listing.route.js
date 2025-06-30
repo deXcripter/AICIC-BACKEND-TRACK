@@ -8,10 +8,10 @@ const { protectRoute } = require("../middleware/protectRoute");
 
 Router.route("/")
   .post(protectRoute, listingController.createListing)
-  .get(protectRoute, listingController.getAllListings);
+  .get(listingController.getAllListings);
 
 Router.route("/:id")
-  .get(listingController.getListingByID)
+  .get(protectRoute, listingController.getListingByID)
   .delete(protectRoute, listingController.deleteListingById)
   .patch(protectRoute, listingController.updateListById);
 
