@@ -1,4 +1,5 @@
 const Listing = require("../models/listing.model");
+const User = require("../models/users.model");
 const AppError = require("../utils/appError");
 const asyncHandler = require("../utils/asyncHanlder");
 const joi = require("joi");
@@ -111,4 +112,24 @@ exports.updateListById = asyncHandler(async (req, res, next) => {
   res
     .status(200)
     .json({ data: item, message: "Item updated successfully" });
+});
+
+exports.getUserListings = asyncHandler(async (req, res, next) => {
+  const { userId } = req.params;
+
+  // Check if user exists
+  const user = await User.findById(userId);
+  if (!user) {
+    return next(new AppError("User not found", 404));
+  }
+
+  const listings = await Listing.find({ userId });
+
+  res.status(200).json({
+    status: "success",
+    results: listings.length,
+    data: {
+      listings,
+    },
+  });
 });

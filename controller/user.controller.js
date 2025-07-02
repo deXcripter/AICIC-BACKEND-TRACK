@@ -8,6 +8,22 @@ exports.getAllUsers = asyncHandler(async (req, res, next) => {
   res.json({ noOfUsers: users.length, data: users });
 });
 
+exports.getUserProfile = asyncHandler(async (req, res, next) => {
+  const { userId } = req.params;
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return next(new AppError("User not found", 404));
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      user,
+    },
+  });
+});
+
 exports.deleteUser = asyncHandler(async (req, res, next) => {
   const userId = req.params.userId;
   const user = await User.findByIdAndDelete(userId);
