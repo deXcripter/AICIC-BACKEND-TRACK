@@ -20,7 +20,10 @@ async function startServer() {
     });
   } catch (error) {
     // catch any errors that occur during the database connection or server startup
-    console.error("Failed to connect to MongoDB or start server:", error);
+    console.error(
+      "Failed to connect to MongoDB or start server:",
+      error
+    );
     // Exit the process with an error code if connection fails,
     // as the application cannot run without the database.
     process.exit(1);
