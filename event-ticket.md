@@ -2,11 +2,11 @@
 
 ## Introduction
 
-In this assignment, you will build a complete event ticket booking system using Node.js, Express, and MongoDB. This project will test your ability to create a production-quality backend API that handles user authentication, event management, ticket booking, and payment processing.
+In this project, you will build a complete event ticket booking system using Node.js, Express, and MongoDB. This project will test your ability to create a production-quality backend API that handles user authentication, event management, ticket booking, and payment processing.
 
-Your task is to implement a system that allows users to register events, book tickets, process payments, and manage the entire event lifecycle. This project will assess your backend development skills in a real-world scenario
+Your task is to implement a system that allows users to register events, book tickets, process payments, and manage the entire event lifecycle. This project will assess your backend development skills in a real-world scenario.
 
-## Learning Objectives
+## Objectives
 
 By completing this project, you will demonstrate your ability to:
 
@@ -25,14 +25,35 @@ By completing this project, you will demonstrate your ability to:
 
 - [ ] Set up the project with a clean, organized structure (models, routes, controllers, middleware)
 - [ ] Implement a User model that supports multiple roles (admin, organizer, attendee)
-- [ ] Create a user registration endpoint that validates inputs and allows role selection (bw organizer & attendee)
+- [ ] Create a user registration endpoint that validates inputs and allows role selection (between organizer & attendee)
 - [ ] Build a secure login endpoint that generates JWT tokens
 - [ ] Implement password hashing using bcrypt
 - [ ] Create middleware to protect routes based on authentication status
 - [ ] Implement role-based authorization middleware
 - [ ] Build a complete password reset flow with token-based verification
 
+**Required Endpoints:**
+
+| Method | Endpoint              | Description                                |
+| ------ | --------------------- | ------------------------------------------ |
+| POST   | /auth/register        | Register a new user with role selection    |
+| POST   | /auth/login           | Authenticate user and return JWT token     |
+| GET    | /auth/me              | Get current user's profile information     |
+| POST   | /auth/forgot-password | Request a password reset link              |
+| POST   | /auth/reset-password  | Reset password with token                  |
+| POST   | /auth/refresh-token   | Get a new access token using refresh token |
+| POST   | /auth/logout          | Invalidate current token/session           |
+
+**Additional Guidance:**
+
+- Implement proper validation for registration (email format, password strength)
+- Store passwords securely using bcrypt with appropriate salt rounds
+- Create role-specific middleware to protect routes based on user roles
+- Consider implementing token blacklisting for logout functionality
+
 **Deliverable:** Complete authentication system with user registration, login, and role-based access control.
+
+---
 
 ### 2. Event Management
 
@@ -63,6 +84,27 @@ By completing this project, you will demonstrate your ability to:
 - [ ] Implement a filtering system by category, price range, date, location
 - [ ] Create an endpoint to view complete details of a single event
 
+**Required Endpoints:**
+
+| Method | Endpoint                     | Description                                   |
+| ------ | ---------------------------- | --------------------------------------------- |
+| POST   | /events                      | Create a new event (organizers only)          |
+| GET    | /events                      | List all published events with filters        |
+| GET    | /events/:eventId             | Get detailed information about specific event |
+| PUT    | /events/:eventId             | Update event details (organizers only)        |
+| DELETE | /events/:eventId             | Delete an event (organizers only)             |
+| PUT    | /events/:eventId/status      | Toggle event status (draft/publish/cancel)    |
+| GET    | /events/search               | Search events by title/description            |
+| GET    | /events/categories/:category | Filter events by category                     |
+| GET    | /organizer/events            | Get all events created by current organizer   |
+| GET    | /events/featured             | Get featured/highlighted events               |
+
+**Additional Guidance:**
+
+- Implement proper ownership validation for event updates/deletions
+- Use query parameters for filtering (price range, date range, location)
+- Add validation for required event fields before publishing
+
 **Evaluation Criteria:**
 
 - Proper database modeling and relationships
@@ -71,6 +113,8 @@ By completing this project, you will demonstrate your ability to:
 - API design and organization
 
 **Deliverable:** Complete event management system with CRUD operations and filtering capabilities.
+
+---
 
 ### 3. Ticket Booking System
 
@@ -94,14 +138,34 @@ By completing this project, you will demonstrate your ability to:
 - [ ] Add functionality to cancel a ticket (with appropriate business rules)
 - [ ] Create logic to update available ticket counts when bookings are made/cancelled
 
+**Required Endpoints:**
+
+| Method | Endpoint                            | Description                                            |
+| ------ | ----------------------------------- | ------------------------------------------------------ |
+| POST   | /tickets/reserve                    | Reserve tickets for an event                           |
+| GET    | /tickets                            | Get all tickets booked by current user                 |
+| GET    | /tickets/:ticketId                  | Get details of a specific ticket                       |
+| PUT    | /tickets/:ticketId/cancel           | Cancel a ticket booking                                |
+| GET    | /events/:eventId/availability       | Check ticket availability for an event                 |
+| GET    | /organizer/events/:eventId/bookings | Get all bookings for a specific event (organizer only) |
+| GET    | /admin/tickets                      | Admin: View all tickets with filtering options         |
+| GET    | /tickets/reference/:reference       | Get ticket by reference number                         |
+
+**Additional Guidance:**
+
+- Create a robust reference number generation system
+- Consider implementing a time limit for reserved (but unpaid) tickets
+- Add validation for maximum tickets per booking based on availability
+
 **Evaluation Criteria:**
 
-- Concurrency handling in the booking process
 - Validation of business rules
 - Unique identifier generation
 - Relationship management between models
 
 **Deliverable:** Functional ticket booking system with validation and reference generation.
+
+---
 
 ### 4. Payment Integration
 
@@ -120,6 +184,26 @@ By completing this project, you will demonstrate your ability to:
 - [ ] Store payment receipts and link them to bookings
 - [ ] Create an endpoint to view payment history for a booking
 
+**Required Endpoints:**
+
+| Method | Endpoint                         | Description                             |
+| ------ | -------------------------------- | --------------------------------------- |
+| POST   | /payments/initialize             | Initialize payment for booked tickets   |
+| GET    | /payments/verify/:reference      | Verify payment status                   |
+| POST   | /payments/webhook                | Webhook for payment service callbacks   |
+| GET    | /payments/:paymentId             | Get payment details                     |
+| GET    | /tickets/:ticketId/payment       | Get payment information for a ticket    |
+| GET    | /user/payments                   | Get payment history for current user    |
+| POST   | /tickets/:ticketId/complete-free | Complete booking for free events        |
+| GET    | /admin/payments                  | Admin: View all payments with filtering |
+
+**Additional Guidance:**
+
+- Securely store Paystack API keys in environment variables
+- Implement proper verification of payment callbacks
+- Handle edge cases like payment timeouts and failures
+- Consider implementing payment expiration for pending payments
+
 **Evaluation Criteria:**
 
 - Successful integration with external payment service
@@ -128,6 +212,8 @@ By completing this project, you will demonstrate your ability to:
 - Transaction management
 
 **Deliverable:** Complete payment flow integration with Paystack, supporting both paid and free events.
+
+---
 
 ### 5. Admin Features and Notifications
 
@@ -147,6 +233,28 @@ By completing this project, you will demonstrate your ability to:
 - [ ] Build a reminder system for upcoming events
 - [ ] (Advanced) Set up scheduled jobs for automated reminders
 
+**Required Endpoints:**
+
+| Method | Endpoint                       | Description                                  |
+| ------ | ------------------------------ | -------------------------------------------- |
+| GET    | /admin/users                   | Admin: List all users with filtering         |
+| PUT    | /admin/users/:userId           | Admin: Update user details/status            |
+| DELETE | /admin/users/:userId           | Admin: Delete a user account                 |
+| GET    | /admin/events                  | Admin: Get all events with filtering         |
+| PUT    | /admin/events/:eventId/approve | Admin: Approve/reject an event               |
+| GET    | /admin/bookings                | Admin: View all bookings with filtering      |
+| GET    | /admin/stats/overview          | Admin: Get platform overview statistics      |
+| GET    | /admin/stats/events            | Admin: Get event statistics                  |
+| GET    | /admin/stats/revenue           | Admin: Get revenue reports with date filters |
+| POST   | /notifications/test            | Admin: Test email notification delivery      |
+
+**Additional Guidance:**
+
+- Consider adding pagination for all listing endpoints
+- Create reusable email templates for different notification types
+- For scheduled reminders, consider using a package like node-cron
+- Ensure all admin endpoints are properly protected
+
 **Evaluation Criteria:**
 
 - Implementation of admin privileges
@@ -156,49 +264,34 @@ By completing this project, you will demonstrate your ability to:
 
 **Deliverable:** Admin management capabilities and email notification system.
 
-### 6. API Refinements and Documentation
+---
 
-**API Improvements**
+## API Response Format
 
-- [ ] Add comprehensive input validation to all endpoints
-- [ ] Implement consistent error handling across the application
-- [ ] Create a standardized API response format
-- [ ] Add rate limiting to prevent API abuse
-- [ ] Implement a request logging system
+For consistency, all API responses should follow this format:
 
-**Documentation and Deployment Preparation**
+**Success Response:**
 
-- [ ] Create Swagger/OpenAPI documentation for all endpoints
-- [ ] Build a Postman collection with example requests
-- [ ] Document database schema and relationships
-- [ ] Prepare environment configuration for deployment
-- [ ] Write setup instructions for local development
-
-**Evaluation Criteria:**
-
-- Quality and completeness of documentation
-- Consistency of API responses
-- Implementation of security measures
-- Code organization and readiness for deployment
-
-**Deliverable:** Production-ready API with documentation and deployment preparation.
-
-## Technical Specifications
-
-### Required Project Structure
-
-Organize your code using this structure:
-
+```json
+{
+  "success": true,
+  "data": {
+    /* response data */
+  },
+  "message": "Operation successful"
+}
 ```
-src/
-  ├── config/            # Configuration files
-  ├── controllers/       # Request handlers
-  ├── middleware/        # Custom middleware
-  ├── models/            # Database models
-  ├── routes/            # API routes
-  ├── services/          # Business logic
-  ├── utils/             # Helper functions
-  └── app.js             # App entry point
+
+**Error Response:**
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Description of the error"
+  }
+}
 ```
 
 ## Evaluation Criteria
