@@ -1,4 +1,4 @@
-# Event Ticket Booker – Backend Development Assignment
+# Event Ticket Booker – Backend Development Project
 
 ## Introduction
 
