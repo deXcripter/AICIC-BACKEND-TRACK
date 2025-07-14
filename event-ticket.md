@@ -32,13 +32,6 @@ By completing this project, you will demonstrate your ability to:
 - [ ] Implement role-based authorization middleware
 - [ ] Build a complete password reset flow with token-based verification
 
-**Evaluation Criteria:**
-
-- Security of authentication implementation
-- Proper validation of user inputs
-- Correct implementation of JWT-based authentication
-- Effective role-based permission handling
-
 **Deliverable:** Complete authentication system with user registration, login, and role-based access control.
 
 ### 2. Event Management
