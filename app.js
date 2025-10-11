@@ -1,31 +1,39 @@
 const express = require("express");
-const morgan = require("morgan");
-const app = express();
-const errorHandler = require("./controller/error.controller");
+const fs = require("fs");
 
-const { listingRoute } = require("./routes/listing.route");
-const { userRoute } = require("./routes/users.routes");
-const AppError = require("./utils/appError");
-const { authRoute } = require("./routes/auth.route");
+const posts = fs.readFileSync('./dbs/posts.json', 'utf8')
 
-// middlewares
-app.use(morgan("dev"));
-app.use(express.json());
+const app = express()
 
-// routes
-app.use("/api/v1/auth", authRoute);
-app.use("/api/v1/listings", listingRoute);
-app.use("/api/v1/users", userRoute);
-app.use((req, res, next) => {
-  next(
-    new AppError(
-      `This route ${req.method}: ${req.url} does not exist on this server`,
-      404
-    )
-  );
-});
 
-// global errror handler
-app.use(errorHandler.gloablErrorHandler);
+app.use(express.json())
 
-module.exports = app;
+// GET /posts
+app.get('/posts', (req, res) => {
+    res.send(posts)
+})
+
+// POST /posts
+app.post('/posts', (req, res) => {
+    const body = req.body;
+    const data = (JSON.parse(posts))
+    body.id = data.length + 1;
+    data.push(body)
+
+
+
+    fs.writeFileSync('./dbs/posts.json', JSON.stringify(data))
+    
+    
+    res.send("anything")
+})
+
+app.get("/posts/:id", (req, res) => {
+    console.log(req.params)
+    res.send("Okay")
+})
+
+
+app.listen(8000, () => {
+    console.log(`Server is listening on port 8000!`)
+})
