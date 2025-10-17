@@ -1,4 +1,5 @@
 [
+  { "id": 1, "item": "laptop", "poster": "Odinaka", "price": 10200 },
   { "id": 2, "item": "pot", "poster": "Precious", "price": 1200 },
   { "id": 3, "item": "beds", "poster": "Abuchi", "price": 12000 },
   { "id": 4, "item": "pressing irons", "poster": "Ibrahim", "price": 20000 },
