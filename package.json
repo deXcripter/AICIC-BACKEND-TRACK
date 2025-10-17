@@ -1,9 +1,9 @@
 {
-  "name": "posting_api",
+  "name": "post-api",
   "version": "1.0.0",
   "description": "",
   "license": "ISC",
-  "author": "",
+  "author": "Johnpaul",
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
@@ -11,8 +11,5 @@
   },
   "dependencies": {
     "express": "^5.1.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.10"
   }
 }

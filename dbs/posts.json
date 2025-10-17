@@ -1,18 +1,20 @@
 [
-  { "id": 1, "item": "fans", "poster": "Amarachi", "price": 3000 },
   { "id": 2, "item": "pot", "poster": "Precious", "price": 1200 },
   { "id": 3, "item": "beds", "poster": "Abuchi", "price": 12000 },
   { "id": 4, "item": "pressing irons", "poster": "Ibrahim", "price": 20000 },
   { "id": 5, "item": "fans", "poster": "Abuchi", "price": 27000 },
-  { "id": 6, "item": "pot", "poster": "Amarachi", "price": 2000 },
-  { "id": 7, "item": "beds", "poster": "Precious", "price": 10000 },
-  { "id": 8, "item": "pressing irons", "poster": "Ibrahim", "price": 12000 },
-  { "id": 9, "item": "power bank", "poster": "KC", "price": 52000 },
-  { "id": 10, "poster": "Emmanuel", "item": "books", "price": 1200 },
-  { "id": 11, "poster": "Jessica", "item": "snacks", "price": 1200 },
-  { "id": 12, "poster": "Chioma", "item": "snacks", "price": 1200 },
-  { "poster": "Frank", "item": "snacks", "price": 1200, "id": 13 },
-  { "poster": "Frank", "item": "snacks", "price": 1200, "id": 14 },
-  { "poster": "Euka", "item": "snacks", "price": 1200, "id": 15 },
-  { "poster": "Ebuka", "item": "snacks", "price": 1200, "id": 16 }
+  {
+    "item": "Broom",
+    "poster": "Mabel",
+    "price": 3000,
+    "school": "Unizik",
+    "id": 6
+  },
+  {
+    "item": "Sixtus",
+    "poster": "Emmanuel",
+    "price": 1500,
+    "location": "Black market",
+    "id": 7
+  }
 ]
