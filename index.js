@@ -17,9 +17,7 @@ app.use("/api/v1/users", userRouter);
 
 const port = 9000;
 app.listen(port, async () => {
-  await mongnoose.connect(
-    `mongodb+srv://indisputablejay_db_user:vsaZopQT7QpCiFXZ@maincluster.7csm9cf.mongodb.net/main?appName=MainCluster`
-  );
+  await mongnoose.connect();
 
   console.log(`Server is listening on ${port}..`);
 });
