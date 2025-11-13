@@ -4,7 +4,6 @@ const mongnoose = require("mongoose");
 
 const postRouter = require("./routes/post.route");
 const userRouter = require("./routes/user.route");
-const { default: mongoose } = require("mongoose");
 
 const app = express();
 
@@ -18,8 +17,8 @@ app.use("/api/v1/users", userRouter);
 
 const port = 9000;
 app.listen(port, async () => {
-  await mongoose.connect(
-    `mongodb+srv://indisputablejay_db_user:vsaZopQT7QpCiFXZ@maincluster.7csm9cf.mongodb.net/test?appName=MainCluster`
+  await mongnoose.connect(
+    `mongodb+srv://indisputablejay_db_user:vsaZopQT7QpCiFXZ@maincluster.7csm9cf.mongodb.net/main?appName=MainCluster`
   );
 
   console.log(`Server is listening on ${port}..`);

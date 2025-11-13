@@ -1,37 +1,30 @@
-const fs = require("fs");
-const posts = JSON.parse(fs.readFileSync("./dbs/posts.json", "utf8"));
+const { Post } = require("../models/post.model");
 
-function getAllPosts(req, res) {
-  // res.send
-  // res.json
-  res.json({ posts, time: req.currentTime || null });
+async function getAllPosts(req, res) {
+  const posts = await Post.find();
+  res.json({ posts });
 }
 
-function createPost(req, res) {
-  // a user account was created
+async function createPost(req, res) {
+  try {
+    const newPost = await Post.create(req.body);
 
-  const newPost = req.body;
-  newPost.id = posts.length + 1;
-
-  posts.push(newPost);
-
-  fs.writeFileSync("./dbs/posts.json", JSON.stringify(posts));
-
-  res.status(201).send(newPost);
+    res.status(201).send({ post: newPost });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Couldnt create post" });
+  }
 }
 
-function getPost(req, res) {
-  const identifier = parseInt(req.params.id);
+async function getPost(req, res) {
+  const post = await Post.findById(req.params.id);
 
-  if (identifier > posts.length) {
+  if (!post) {
     return res.status(404).json({ message: "This post does not exist" });
   }
 
-  const post = posts.find((elem) => elem.id === identifier);
-
   res.send({
     post: post,
-    date: req.currentTime,
   });
 }
 
@@ -39,9 +32,10 @@ function deletePost(req, res) {
   res.status(501).json({ message: "Route not implemented" });
 }
 
-function updatePost(req, res) {
-  // Leave this for now
-  res.status(501).json({ message: "Route not implemented" });
+async function updatePost(req, res) {
+  const post = await Post.findByIdAndUpdate(req.params.id, req.body);
+
+  res.status(200).json({ message: "" });
 }
 
 module.exports = {
